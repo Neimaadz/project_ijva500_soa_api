@@ -13,9 +13,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 				version = "1.0",
 				description = "IJVA500 Project Cecile Damien Laurie Nathan Victor")
 		)
-public class ProjetIjva500SoaApiApplication {
+public class ProjetIJVA500SoaApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProjetIjva500SoaApiApplication.class, args);
+		SpringApplication.run(ProjetIJVA500SoaApiApplication.class, args);
 	}
 }
