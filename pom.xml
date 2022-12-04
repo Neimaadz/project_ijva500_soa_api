@@ -52,6 +52,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		
 		<!-- Add Swagger documentation localhost:8001/swagger-ui/index.html -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
