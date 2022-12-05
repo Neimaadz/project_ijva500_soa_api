@@ -32,10 +32,10 @@ public class AuthenticationController {
 		return authenticationService.signin(authRequest);
 	}
 	
-	@PutMapping("/updatePassword")
-	@Operation(summary = "Update my password", security = @SecurityRequirement(name = "bearerAuth"))
-	public void updatePassword(@RequestBody UserCredentialsUpdateRequest updateAuthRequest) {
-		authenticationService.updatePassword(updateAuthRequest);
+	@PutMapping("/updateCredentials")
+	@Operation(summary = "Update my credentials", security = @SecurityRequirement(name = "bearerAuth"))
+	public void updateUserCredentials(@RequestBody UserCredentialsUpdateRequest userCredentialsUpdateRequest) {
+		authenticationService.updateUserCredentials(userCredentialsUpdateRequest);
 	}
 
 }

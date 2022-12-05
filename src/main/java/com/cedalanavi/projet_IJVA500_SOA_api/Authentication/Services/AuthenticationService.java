@@ -32,9 +32,9 @@ public class AuthenticationService {
 		return restTemplate.exchange(authServiceUrl + "/signin", HttpMethod.POST, request, AuthenticationResource.class).getBody();
 	}
 	
-	public void updatePassword(UserCredentialsUpdateRequest updateAuthRequest) {
-		HttpEntity<UserCredentialsUpdateRequest> request = new HttpEntity<UserCredentialsUpdateRequest>(updateAuthRequest);
-		restTemplate.exchange(authServiceUrl + "/update", HttpMethod.PUT, request, void.class);
+	public void updateUserCredentials(UserCredentialsUpdateRequest userCredentialsUpdateRequest) {
+		HttpEntity<UserCredentialsUpdateRequest> request = new HttpEntity<UserCredentialsUpdateRequest>(userCredentialsUpdateRequest);
+		restTemplate.exchange(authServiceUrl + "/updateCredentials", HttpMethod.PUT, request, void.class);
 	}
 
 }
