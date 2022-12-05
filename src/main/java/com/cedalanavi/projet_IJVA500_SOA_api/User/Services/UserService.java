@@ -1,5 +1,7 @@
-package com.cedalanavi.projet_IJVA500_SOA_api.UserService.Services;
+package com.cedalanavi.projet_IJVA500_SOA_api.User.Services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,16 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
-import com.cedalanavi.projet_IJVA500_SOA_api.UserService.Data.CreateUserRequest;
-import com.cedalanavi.projet_IJVA500_SOA_api.UserService.Data.UpdateUserRequest;
+import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.CreateUserRequest;
+import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.UpdateUserRequest;
 
 @Service
 public class UserService {
 
 	@Value("${user.service.url}")
 	String userServiceUrl;
-
-	RestTemplate restTemplate = new RestTemplate();
+	
+	@Autowired
+    @Qualifier("myRestTemplate")
+	RestTemplate restTemplate;
 
 	public void createUser(@RequestBody CreateUserRequest userRequest) {
 		HttpEntity<CreateUserRequest> request = new HttpEntity<CreateUserRequest>(userRequest);
