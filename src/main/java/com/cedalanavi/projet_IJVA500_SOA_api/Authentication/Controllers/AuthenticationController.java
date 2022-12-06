@@ -30,14 +30,14 @@ public class AuthenticationController {
 	
 	@PostMapping("/signin")
 	@Operation(summary = "To connect and get JWT Token")
-	public AuthenticationResource signin(@RequestBody AuthenticationRequest authRequest) {
-		return authenticationService.signin(authRequest);
+	public AuthenticationResource signin(@RequestBody AuthenticationRequest authenticationRequest) {
+		return authenticationService.signin(authenticationRequest);
 	}
 	
 	@PutMapping("/updateCredentials")
 	@Operation(summary = "Update my credentials", security = @SecurityRequirement(name = "bearerAuth"))
-	public void updateUserCredentials(@RequestBody AuthCredentialsUpdateRequest userCredentialsUpdateRequest) {
-		authenticationService.updateUserCredentials(userCredentialsUpdateRequest);
+	public void updateUserCredentials(@RequestBody AuthCredentialsUpdateRequest authCredentialsUpdateRequest) {
+		authenticationService.updateUserCredentials(authCredentialsUpdateRequest);
 	}
 
 }

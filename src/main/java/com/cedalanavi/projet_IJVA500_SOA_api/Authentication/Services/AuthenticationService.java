@@ -37,13 +37,13 @@ public class AuthenticationService {
 		}
 	}
 	
-	public AuthenticationResource signin(AuthenticationRequest authRequest) {
-		HttpEntity<AuthenticationRequest> request = new HttpEntity<AuthenticationRequest>(authRequest);
+	public AuthenticationResource signin(AuthenticationRequest authenticationRequest) {
+		HttpEntity<AuthenticationRequest> request = new HttpEntity<AuthenticationRequest>(authenticationRequest);
 		return restTemplate.exchange(authServiceUrl + "/signin", HttpMethod.POST, request, AuthenticationResource.class).getBody();
 	}
 	
-	public void updateUserCredentials(AuthCredentialsUpdateRequest userCredentialsUpdateRequest) {
-		HttpEntity<AuthCredentialsUpdateRequest> request = new HttpEntity<AuthCredentialsUpdateRequest>(userCredentialsUpdateRequest);
+	public void updateUserCredentials(AuthCredentialsUpdateRequest authCredentialsUpdateRequest) {
+		HttpEntity<AuthCredentialsUpdateRequest> request = new HttpEntity<AuthCredentialsUpdateRequest>(authCredentialsUpdateRequest);
 		restTemplate.exchange(authServiceUrl + "/updateCredentials", HttpMethod.PUT, request, void.class);
 	}
 
