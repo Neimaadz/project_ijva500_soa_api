@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.UpdateUserRequest;
+import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.UserUpdateRequest;
 import com.cedalanavi.projet_IJVA500_SOA_api.User.Services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +23,7 @@ public class UserController {
 
 	@PutMapping("/update/{id}")
 	@Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-	public void updateUser(@RequestBody UpdateUserRequest userRequest, @PathVariable int id) {
+	public void updateUser(@RequestBody UserUpdateRequest userRequest, @PathVariable int id) {
 		userService.updateUser(userRequest, id);
 	}
 

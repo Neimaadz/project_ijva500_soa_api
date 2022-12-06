@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthCredentialsUpdateRequest;
 import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthenticationRequest;
 import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthenticationResource;
-import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.CreateUserRequest;
+import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.UserCreateRequest;
 
 @Service
 public class AuthenticationService {
@@ -29,10 +29,10 @@ public class AuthenticationService {
 
 	public void register(@RequestBody AuthenticationRequest authenticationRequest) {
 		HttpEntity<AuthenticationRequest> authCreateRequest = new HttpEntity<AuthenticationRequest>(authenticationRequest);
-		CreateUserRequest response = restTemplate.exchange(authServiceUrl + "/register", HttpMethod.POST, authCreateRequest, CreateUserRequest.class).getBody();
+		UserCreateRequest response = restTemplate.exchange(authServiceUrl + "/register", HttpMethod.POST, authCreateRequest, UserCreateRequest.class).getBody();
 		
 		if (response != null) {
-			HttpEntity<CreateUserRequest> userCreateRequest = new HttpEntity<CreateUserRequest>(response);
+			HttpEntity<UserCreateRequest> userCreateRequest = new HttpEntity<UserCreateRequest>(response);
 			restTemplate.exchange(userServiceUrl + "/create", HttpMethod.POST, userCreateRequest, Void.class);
 		}
 	}
