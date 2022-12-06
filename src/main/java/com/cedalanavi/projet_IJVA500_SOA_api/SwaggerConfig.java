@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 		)
 @SecurityScheme(
 	    name = "bearerAuth",
+	    description = "Put your JWT token (WITHOUT the prefix Bearer)",
 		in = SecuritySchemeIn.HEADER,
 	    type = SecuritySchemeType.HTTP,
 	    bearerFormat = "JWT",
