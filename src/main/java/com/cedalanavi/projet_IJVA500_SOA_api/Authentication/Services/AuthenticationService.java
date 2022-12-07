@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +33,9 @@ public class AuthenticationService {
 		UserCreateRequest response = restTemplate.exchange(authServiceUrl + "/register", HttpMethod.POST, authCreateRequest, UserCreateRequest.class).getBody();
 		
 		if (response != null) {
-			HttpEntity<UserCreateRequest> userCreateRequest = new HttpEntity<UserCreateRequest>(response);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", "Bearer " + response.token);
+			HttpEntity<UserCreateRequest> userCreateRequest = new HttpEntity<UserCreateRequest>(response, headers);
 			restTemplate.exchange(userServiceUrl + "/create", HttpMethod.POST, userCreateRequest, Void.class);
 		}
 	}

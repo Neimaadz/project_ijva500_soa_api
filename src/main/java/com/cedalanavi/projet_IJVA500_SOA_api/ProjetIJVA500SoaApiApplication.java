@@ -17,10 +17,10 @@ public class ProjetIJVA500SoaApiApplication {
 	}
 	
 	@Bean(name = "myRestTemplate")
-	public RestTemplate collectCentRestTemplate(RestTemplateBuilder builder, HttpServletRequest requestt) {
+	public RestTemplate collectCentRestTemplate(RestTemplateBuilder builder, HttpServletRequest httpServletRequest) {
 	    return builder.rootUri("/**")
 	            .additionalInterceptors((ClientHttpRequestInterceptor) (request, body, execution) -> {
-	                request.getHeaders().add("Authorization", requestt.getHeader("Authorization"));
+	                request.getHeaders().add("Authorization", httpServletRequest.getHeader("Authorization"));
 	                return execution.execute(request, body);
 	            }).build();
 	}
