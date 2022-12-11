@@ -51,6 +51,12 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.12</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.cedalanavi</groupId>
+			<artifactId>projet_ijva500_soa_utils</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
