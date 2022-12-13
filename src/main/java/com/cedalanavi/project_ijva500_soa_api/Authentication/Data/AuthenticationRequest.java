@@ -1,11 +1,8 @@
-package com.cedalanavi.projet_IJVA500_SOA_api.UserService;
+package com.cedalanavi.project_ijva500_soa_api.Authentication.Data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Data;
-
-@Data
-public class CreateUserRequest {
+public class AuthenticationRequest {
 
 	@JsonIgnore(value = false)
 	public String username;
