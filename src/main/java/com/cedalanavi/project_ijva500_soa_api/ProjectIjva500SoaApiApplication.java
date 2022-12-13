@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-import com.cedalanavi.projet_IJVA500_SOA_utils.RestTemplateConfig;
+import com.cedalanavi.project_ijva500_soa_utils.RestTemplateConfig;
 
 @SpringBootApplication
 @Import(RestTemplateConfig.class)
