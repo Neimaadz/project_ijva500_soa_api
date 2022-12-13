@@ -1,4 +1,4 @@
-package com.cedalanavi.projet_IJVA500_SOA_api;
+package com.cedalanavi.project_ijva500_soa_api;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

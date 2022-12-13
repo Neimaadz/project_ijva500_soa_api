@@ -1,4 +1,4 @@
-package com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Controllers;
+package com.cedalanavi.project_ijva500_soa_api.Authentication.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthCredentialsUpdateRequest;
-import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthenticationRequest;
-import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthenticationResource;
-import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Services.AuthenticationService;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthCredentialsUpdateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationRequest;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationResource;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Services.AuthenticationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

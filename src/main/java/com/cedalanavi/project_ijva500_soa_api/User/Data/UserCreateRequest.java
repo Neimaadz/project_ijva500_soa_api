@@ -1,4 +1,4 @@
-package com.cedalanavi.projet_IJVA500_SOA_api.User.Data;
+package com.cedalanavi.project_ijva500_soa_api.User.Data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

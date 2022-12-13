@@ -1,4 +1,4 @@
-package com.cedalanavi.projet_IJVA500_SOA_api.User.Services;
+package com.cedalanavi.project_ijva500_soa_api.User.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
-import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.UserUpdateRequest;
+import com.cedalanavi.project_ijva500_soa_api.User.Data.UserUpdateRequest;
 
 @Service
 public class UserService {

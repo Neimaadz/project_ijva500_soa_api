@@ -1,4 +1,4 @@
-package com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Services;
+package com.cedalanavi.project_ijva500_soa_api.Authentication.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
-import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthCredentialsUpdateRequest;
-import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthenticationRequest;
-import com.cedalanavi.projet_IJVA500_SOA_api.Authentication.Data.AuthenticationResource;
-import com.cedalanavi.projet_IJVA500_SOA_api.User.Data.UserCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthCredentialsUpdateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationRequest;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationResource;
+import com.cedalanavi.project_ijva500_soa_api.User.Data.UserCreateRequest;
 
 @Service
 public class AuthenticationService {
