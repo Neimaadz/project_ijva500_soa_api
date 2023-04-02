@@ -5,5 +5,5 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class UserUpdateRequest {
 	
 	@JsonIgnore(value = false)
-	public String password;
+	public String username;
 }
