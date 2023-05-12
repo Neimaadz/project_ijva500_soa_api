@@ -1,6 +1,8 @@
 package com.cedalanavi.project_ijva500_soa_api.ManageRights.Services;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,6 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,12 +63,32 @@ public class ManageRightsService {
 	public ManageRightsResource addUserRights(UserRightsRequest userRightsRequest) {
 		userRightsRequest.username = userService.getUser(userRightsRequest.idUser).username;
 		HttpEntity<UserRightsRequest> request = new HttpEntity<UserRightsRequest>(userRightsRequest);
-		return restTemplate.exchange(manageUserRightsServiceUrl + "/user/add", HttpMethod.POST, request, ManageRightsResource.class).getBody();
+		ManageRightsResource manageRightsResource = restTemplate.exchange(manageUserRightsServiceUrl + "/user/add", HttpMethod.POST, request, ManageRightsResource.class).getBody();
+		
+	 	Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+	 	manageRightsResource.referentialUserRights.forEach(userRight -> {
+	 		grantedAuthorities.add(new SimpleGrantedAuthority(userRight.label));
+        });
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), grantedAuthorities);
+		SecurityContextHolder.getContext().setAuthentication(newAuth);
+		
+		return manageRightsResource;
 	}
 	
 	public ManageRightsResource updateUserRights(UserRightsRequest userRightsRequest) {
 		userRightsRequest.username = userService.getUser(userRightsRequest.idUser).username;
 		HttpEntity<UserRightsRequest> request = new HttpEntity<UserRightsRequest>(userRightsRequest);
-		return restTemplate.exchange(manageUserRightsServiceUrl + "/user/update", HttpMethod.PUT, request, ManageRightsResource.class).getBody();
+		ManageRightsResource manageRightsResource = restTemplate.exchange(manageUserRightsServiceUrl + "/user/update", HttpMethod.PUT, request, ManageRightsResource.class).getBody();
+
+	 	Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+	 	manageRightsResource.referentialUserRights.forEach(userRight -> {
+	 		grantedAuthorities.add(new SimpleGrantedAuthority(userRight.label));
+        });
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), grantedAuthorities);
+		SecurityContextHolder.getContext().setAuthentication(newAuth);
+		
+		return manageRightsResource;
 	}
 }
