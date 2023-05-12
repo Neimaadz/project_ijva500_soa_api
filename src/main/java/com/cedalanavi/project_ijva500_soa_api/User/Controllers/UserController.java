@@ -41,7 +41,7 @@ public class UserController {
 		return userService.getUsers();
 	}
 	
-	@GetMapping("/user/{id}")
+	@GetMapping("/user/{idUser}")
 	@Operation(
 			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Get user informations by id user",
 			description = "Retrieve the user informations by giving the id user",
@@ -53,11 +53,11 @@ public class UserController {
 							content = @Content(schema = @Schema(hidden = true)))
 					}
 	)
-	public UserResource getUser(@PathVariable int id) {
-		return userService.getUser(id);
+	public UserResource getUser(@PathVariable String idUser) {
+		return userService.getUser(idUser);
 	}
 
-	@PutMapping("/update/{id}")
+	@PutMapping("/update/{idUser}")
 	@Operation(
 			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Update user informations by id",
 			description = "Update the user informations by giving the id user",
@@ -69,18 +69,18 @@ public class UserController {
 							content = @Content(schema = @Schema(hidden = true)))
 					}
 	)
-	public void updateUser(@RequestBody UserUpdateRequest userRequest, @PathVariable int id) {
-		userService.updateUser(userRequest, id);
+	public void updateUser(@RequestBody UserUpdateRequest userRequest, @PathVariable String idUser) {
+		userService.updateUser(userRequest, idUser);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/delete/{idUser}")
 	@Operation(
 			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Delete user by id user",
 			description = "Delete the user by giving the id user",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully deleted the user informations")
 	)
-	public void deleteUser(@PathVariable int id) {
-		userService.deleteUser(id);
+	public void deleteUser(@PathVariable String idUser) {
+		userService.deleteUser(idUser);
 	}
 
 }

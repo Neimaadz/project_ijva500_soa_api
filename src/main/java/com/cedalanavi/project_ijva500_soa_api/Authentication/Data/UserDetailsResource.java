@@ -1,13 +1,24 @@
 package com.cedalanavi.project_ijva500_soa_api.Authentication.Data;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ReferentialUserRight;
 
 public class UserDetailsResource {
 
+	String idUser;
+	
 	String username;
 
-	List<String> authorities = new ArrayList<String>();
+	public List<ReferentialUserRight> referentialUserRights;
+
+	public String getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(String idUser) {
+		this.idUser = idUser;
+	}
 
 	public String getUsername() {
 		return username;
@@ -17,13 +28,12 @@ public class UserDetailsResource {
 		this.username = username;
 	}
 
-	public List<String> getAuthorities() {
-		return authorities;
+	public List<ReferentialUserRight> getReferentialUserRights() {
+		return referentialUserRights;
 	}
 
-	public void setAuthorities(List<String> authorities) {
-		this.authorities = authorities;
+	public void setReferentialUserRights(List<ReferentialUserRight> referentialUserRights) {
+		this.referentialUserRights = referentialUserRights;
 	}
-	
 	
 }

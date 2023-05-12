@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthCredentialsUpdateRequest;
-import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthInformationResource;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationRequest;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationResource;
+import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.UserDetailsResource;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Services.AuthenticationService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,14 +42,8 @@ public class AuthenticationController {
 					@ApiResponse(responseCode = "200", description = "Informations of current user connected"),
 					@ApiResponse(responseCode = "500", description = "Throw an exception - not connected", content = @Content(schema = @Schema(hidden = true)))}
 	)
-	public AuthInformationResource Me() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		AuthInformationResource authInformationResource = new AuthInformationResource();
-		
-		authInformationResource.setUsername(authentication.getName());
-		authInformationResource.setAutorities(authentication.getAuthorities());
-		
-		return authInformationResource;
+	public UserDetailsResource Me(HttpServletRequest httpServletRequest) {
+    	return authenticationService.currentSession(httpServletRequest);
 	}
 	
 	@PostMapping("/register")

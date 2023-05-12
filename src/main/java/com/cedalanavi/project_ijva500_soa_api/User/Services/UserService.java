@@ -31,19 +31,19 @@ public class UserService {
 		return restTemplate.exchange(userServiceUrl + "/users", HttpMethod.GET,  null, new ParameterizedTypeReference<List<UserResource>>(){}).getBody();
 	}
 	
-	public UserResource getUser(int id) {
-		return restTemplate.getForEntity(userServiceUrl + "/user/" + id, UserResource.class).getBody();
+	public UserResource getUser(String idUser) {
+		return restTemplate.getForEntity(userServiceUrl + "/user/" + idUser, UserResource.class).getBody();
 	}
 	
-	public void updateUser(UserUpdateRequest userRequest, int id) {
+	public void updateUser(UserUpdateRequest userRequest, String idUser) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<UserUpdateRequest> request = new HttpEntity<UserUpdateRequest>(userRequest, headers);
-		restTemplate.exchange(userServiceUrl + "/update/" + id, HttpMethod.PUT, request, Void.class);
+		restTemplate.exchange(userServiceUrl + "/update/" + idUser, HttpMethod.PUT, request, Void.class);
 	}
 
-	public void deleteUser(int id) {
-		restTemplate.delete(userServiceUrl + "/delete/" + id);
+	public void deleteUser(String idUser) {
+		restTemplate.delete(userServiceUrl + "/delete/" + idUser);
 	}
 
 }

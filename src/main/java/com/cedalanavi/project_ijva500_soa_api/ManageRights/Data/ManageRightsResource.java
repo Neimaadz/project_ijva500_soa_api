@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ManageRightsResource {
 
-	public int idUser;
+	public String idUser;
 	
 	public String username;
 

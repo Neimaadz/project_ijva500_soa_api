@@ -1,5 +1,6 @@
 package com.cedalanavi.project_ijva500_soa_api.Authentication.Services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.Authentication
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationResource;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.UserDetailsResource;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ManageRightsResource;
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.UserRightsRequest;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Services.ManageRightsService;
 import com.cedalanavi.project_ijva500_soa_api.User.Data.UserCreateRequest;
 
@@ -53,6 +55,15 @@ public class AuthenticationService {
 	
 	@Autowired
 	ManageRightsService manageRightsService;
+	
+	public UserDetailsResource currentSession(HttpServletRequest httpServletRequest) {
+    	Object sessionAuthStored = httpServletRequest.getSession().getAttribute("Authorization");
+		String jwtToken = sessionAuthStored.toString().substring(7);
+		UserDetailsResource authenticated = isAuthenticated(jwtToken);
+		authenticated.setReferentialUserRights(manageRightsService.getUserRightsByUsername(authenticated.getUsername()).referentialUserRights);
+		
+		return authenticated;
+	}
 
 	public void register(AuthenticationRequest authenticationRequest) {
 		HttpEntity<AuthenticationRequest> authCreateRequest = new HttpEntity<AuthenticationRequest>(authenticationRequest);
@@ -63,6 +74,12 @@ public class AuthenticationService {
 			headers.add("Authorization", "Bearer " + response.token);
 			HttpEntity<UserCreateRequest> userCreateRequest = new HttpEntity<UserCreateRequest>(response, headers);
 			restTemplate.exchange(userServiceUrl + "/create", HttpMethod.POST, userCreateRequest, Void.class);
+			
+			UserRightsRequest userRightsRequest = new UserRightsRequest();
+			userRightsRequest.setIdUser(response.idUser);
+			userRightsRequest.setUsername(response.username);
+			userRightsRequest.setReferentialUserRights(new ArrayList<String>());
+			manageRightsService.addUserRights(userRightsRequest);
 		}
 	}
 	
@@ -71,18 +88,14 @@ public class AuthenticationService {
 		HttpEntity<AuthenticationRequest> authRequest = new HttpEntity<AuthenticationRequest>(authenticationRequest);
 		AuthenticationResource authenticationResource = new RestTemplate().exchange(authServiceUrl + "/signin", HttpMethod.POST, authRequest, AuthenticationResource.class).getBody();
 		final String token = authenticationResource.token;
-		// Store token in session to use lately 
+		// Store token in session to use lately
 		httpServletRequest.getSession().setAttribute("Authorization", "Bearer " + token);
 		
 		if (token != null) {
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Authorization", "Bearer " + token);
-			HttpEntity<String> request = new HttpEntity<>("body", headers);
-			
 			// Call Authentication service to check token validity
-			UserDetailsResource userDetailsResource = restTemplate.exchange(authenticationUrl + "/isAuthenticated", HttpMethod.GET, request, UserDetailsResource.class).getBody();
+			UserDetailsResource userDetailsResource = isAuthenticated(token);
 			// Call Manage rights service to get user rights
-			ManageRightsResource manageRightsResource = restTemplate.getForEntity(manageUserRightsServiceUrl + "/user/" + userDetailsResource.getUsername(), ManageRightsResource.class).getBody();
+			ManageRightsResource manageRightsResource = manageRightsService.getUserRightsByUsername(userDetailsResource.getUsername());
 			
 	        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 	        manageRightsResource.referentialUserRights.forEach(userRight -> {
@@ -110,6 +123,14 @@ public class AuthenticationService {
 	public void updateUserCredentials(AuthCredentialsUpdateRequest authCredentialsUpdateRequest) {
 		HttpEntity<AuthCredentialsUpdateRequest> request = new HttpEntity<AuthCredentialsUpdateRequest>(authCredentialsUpdateRequest);
 		restTemplate.exchange(authServiceUrl + "/credentials/update", HttpMethod.PUT, request, void.class);
+	}
+	
+	public UserDetailsResource isAuthenticated(String token) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "Bearer " + token);
+		HttpEntity<String> request = new HttpEntity<>("body", headers);
+		
+		return restTemplate.exchange(authenticationUrl + "/isAuthenticated", HttpMethod.GET, request, UserDetailsResource.class).getBody();
 	}
 	
 	
