@@ -30,21 +30,18 @@ import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.Authentication
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.AuthenticationResource;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.UserDetailsResource;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ManageRightsResource;
-import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.UserRightsRequest;
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.UserRightsCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Services.ManageRightsService;
 import com.cedalanavi.project_ijva500_soa_api.User.Data.UserCreateRequest;
 
 @Service
 public class AuthenticationService {
-
-	@Value("${authentication.service.url}")
-	String authenticationUrl;
-	
-	@Value("${manage.user.rights.service.url}")
-	String manageUserRightsServiceUrl;
 	
 	@Value("${authentication.service.url}")
 	String authServiceUrl;
+	
+	@Value("${manage.user.rights.service.url}")
+	String manageUserRightsServiceUrl;
 	
 	@Value("${user.service.url}")
 	String userServiceUrl;
@@ -74,12 +71,12 @@ public class AuthenticationService {
 			headers.add("Authorization", "Bearer " + response.token);
 			HttpEntity<UserCreateRequest> userCreateRequest = new HttpEntity<UserCreateRequest>(response, headers);
 			restTemplate.exchange(userServiceUrl + "/create", HttpMethod.POST, userCreateRequest, Void.class);
-			
-			UserRightsRequest userRightsRequest = new UserRightsRequest();
-			userRightsRequest.setIdUser(response.idUser);
-			userRightsRequest.setUsername(response.username);
-			userRightsRequest.setReferentialUserRights(new ArrayList<String>());
-			manageRightsService.addUserRights(userRightsRequest);
+
+			UserRightsCreateRequest userRightsCreateRequest = new UserRightsCreateRequest();
+			userRightsCreateRequest.setIdUser(response.idUser);
+			userRightsCreateRequest.setUsername(response.username);
+			userRightsCreateRequest.setReferentialUserRights(new ArrayList<String>());
+			manageRightsService.addUserRights(userRightsCreateRequest);
 		}
 	}
 	
@@ -130,7 +127,7 @@ public class AuthenticationService {
 		headers.add("Authorization", "Bearer " + token);
 		HttpEntity<String> request = new HttpEntity<>("body", headers);
 		
-		return restTemplate.exchange(authenticationUrl + "/isAuthenticated", HttpMethod.GET, request, UserDetailsResource.class).getBody();
+		return restTemplate.exchange(authServiceUrl + "/isAuthenticated", HttpMethod.GET, request, UserDetailsResource.class).getBody();
 	}
 	
 	

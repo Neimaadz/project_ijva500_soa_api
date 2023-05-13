@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/service-user")
 @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
-@Tag(name = "User Controller", description = "${SWAGGER.TAG.CONDITION.REQUIRED}")
+@Tag(name = "User Controller", description = "<h4>${SWAGGER.TAG.CONDITION.REQUIRED}</h4>")
 public class UserController {
 	
 	@Autowired
@@ -33,8 +33,8 @@ public class UserController {
 
 	@GetMapping("/users")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Get all users informations",
-			description = "Retrieve all users informations",
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Get all users informations",
+			description = "<h2>Retrieve all users informations</h2>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully retrieved all users informations")
 	)
 	public List<UserResource> getUsers() {
@@ -43,8 +43,8 @@ public class UserController {
 	
 	@GetMapping("/user/{idUser}")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Get user informations by id user",
-			description = "Retrieve the user informations by giving the id user",
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Get user informations by id user",
+			description = "<h2>Retrieve the user informations by giving the id user</h2>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully retrieved the user informations"),
 					@ApiResponse(
@@ -59,8 +59,9 @@ public class UserController {
 
 	@PutMapping("/update/{idUser}")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Update user informations by id",
-			description = "Update the user informations by giving the id user",
+			hidden = true,
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Update user informations by id",
+			description = "<h2>Update the user informations by giving the id user</h2>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully updated the user informations"),
 					@ApiResponse(
@@ -69,14 +70,14 @@ public class UserController {
 							content = @Content(schema = @Schema(hidden = true)))
 					}
 	)
-	public void updateUser(@RequestBody UserUpdateRequest userRequest, @PathVariable String idUser) {
-		userService.updateUser(userRequest, idUser);
+	public void updateUser(@PathVariable String idUser, @RequestBody UserUpdateRequest userUpdateRequest) {
+		userService.updateUser(idUser, userUpdateRequest);
 	}
 
 	@DeleteMapping("/delete/{idUser}")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Delete user by id user",
-			description = "Delete the user by giving the id user",
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Delete user by id user",
+			description = "<h2>Delete the user by giving the id user</h2>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully deleted the user informations")
 	)
 	public void deleteUser(@PathVariable String idUser) {
