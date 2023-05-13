@@ -37,7 +37,7 @@ public class AuthenticationController {
 	@GetMapping("/me")
 	@Tag(name = TAG_CONNECTION)
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Current user",
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Current user",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Informations of current user connected"),
 					@ApiResponse(responseCode = "500", description = "Throw an exception - not connected", content = @Content(schema = @Schema(hidden = true)))}
@@ -50,8 +50,8 @@ public class AuthenticationController {
 	@PreAuthorize("permitAll()")
 	@Tag(name = TAG_CONNECTION)
 	@Operation(
-			summary = "Register me and Create user",
-			description = "Sign up to create an account",
+			summary = "Register me",
+			description = "<h2>Sign Up</h2>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully signed up"),
 					@ApiResponse(responseCode = "500", description = "Throw an exception - username already taken")}
@@ -64,8 +64,9 @@ public class AuthenticationController {
 	@PreAuthorize("permitAll()")
 	@Tag(name = TAG_CONNECTION)
 	@Operation(
-			summary = "Sign in and get a JWT Token",
-			description = "Sign in to get JWT Token and access to other API resources",
+			summary = "Sign in",
+			description = "<h2>Sign in</h2> "
+					+ "<h4>Sign in to get JWT Token and access to other API resources</h4>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully signed in and got the token"),
 					@ApiResponse(responseCode = "500", description = "Throw an exception - bad credentials", content = @Content(schema = @Schema(hidden = true)))}
@@ -86,11 +87,11 @@ public class AuthenticationController {
 		authenticationService.logout(request);
 	}
 
-	@PutMapping("/credentials/update")
-	@Tag(name = "Authentication Controller", description = "${SWAGGER.TAG.CONDITION.REQUIRED}")
+	@PutMapping("/credentials/update/me")
+	@Tag(name = "Authentication Controller", description = "<h4>${SWAGGER.TAG.CONDITION.REQUIRED}</h4>")
 	@Operation(
 			summary = "Update my credentials",
-			description = "Update my account credentials",
+			description = "<h2>Update my account credentials</h2>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully updated my account credentials")
 	)
 	public void updateUserCredentials(@RequestBody AuthCredentialsUpdateRequest authCredentialsUpdateRequest) {

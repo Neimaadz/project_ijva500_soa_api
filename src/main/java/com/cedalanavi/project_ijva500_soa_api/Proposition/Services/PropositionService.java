@@ -17,6 +17,7 @@ import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.UserDetailsRes
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.AmendmentCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionResource;
+import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionUpdateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.VoteCreateRequest;
 
 @Service
@@ -48,6 +49,11 @@ public class PropositionService {
 		amendmentCreateRequest.setIdUser(userDetailsResource.getIdUser());
 		HttpEntity<AmendmentCreateRequest> request = new HttpEntity<AmendmentCreateRequest>(amendmentCreateRequest);
 		return restTemplate.exchange(propositionServiceUrl + "/amendment", HttpMethod.POST,  request, PropositionResource.class).getBody();
+	}
+	
+	public PropositionResource update(Long id, PropositionUpdateRequest updateRequest) {
+		HttpEntity<PropositionUpdateRequest> request = new HttpEntity<PropositionUpdateRequest>(updateRequest);
+		return restTemplate.exchange(propositionServiceUrl + "/update/" + id, HttpMethod.PUT,  request, PropositionResource.class).getBody();
 	}
 
 	public PropositionResource vote(UserDetailsResource userDetailsResource, VoteCreateRequest voteCreateRequest) throws Exception {

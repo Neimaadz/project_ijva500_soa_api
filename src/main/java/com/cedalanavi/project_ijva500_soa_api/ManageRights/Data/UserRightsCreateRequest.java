@@ -2,13 +2,10 @@ package com.cedalanavi.project_ijva500_soa_api.ManageRights.Data;
 
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.Hidden;
-
-public class UserRightsRequest {
+public class UserRightsCreateRequest {
 	
 	public String idUser;
-
-	@Hidden
+	
 	public String username;
 	
 	public List<String> referentialUserRights;
@@ -36,5 +33,4 @@ public class UserRightsRequest {
 	public void setReferentialUserRights(List<String> referentialUserRights) {
 		this.referentialUserRights = referentialUserRights;
 	}
-	
 }

@@ -9,7 +9,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,6 +20,12 @@ public class UserService {
 
 	@Value("${user.service.url}")
 	String userServiceUrl;
+
+	@Value("${manage.user.rights.service.url}")
+	String manageUserRightsServiceUrl;
+
+	@Value("${authentication.service.url}")
+	String authServiceUrl;
 	
 	@Autowired
     @Qualifier("myRestTemplate")
@@ -35,14 +40,15 @@ public class UserService {
 		return restTemplate.getForEntity(userServiceUrl + "/user/" + idUser, UserResource.class).getBody();
 	}
 	
-	public void updateUser(UserUpdateRequest userRequest, String idUser) {
+	public void updateUser(String idUser, UserUpdateRequest userUpdateRequest) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<UserUpdateRequest> request = new HttpEntity<UserUpdateRequest>(userRequest, headers);
+		HttpEntity<UserUpdateRequest> request = new HttpEntity<UserUpdateRequest>(userUpdateRequest, headers);
 		restTemplate.exchange(userServiceUrl + "/update/" + idUser, HttpMethod.PUT, request, Void.class);
 	}
 
 	public void deleteUser(String idUser) {
+		restTemplate.delete(authServiceUrl + "/delete/" + idUser);
+		restTemplate.delete(manageUserRightsServiceUrl + "/delete/" + idUser);
 		restTemplate.delete(userServiceUrl + "/delete/" + idUser);
 	}
 

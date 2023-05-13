@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.AddReferentialUserRightRequest;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ManageRightsResource;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ReferentialUserRight;
-import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.UpdateReferentialUserRightRequest;
-import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.UserRightsRequest;
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ReferentialUserRightCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ReferentialUserRightUpdateRequest;
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.UserRightsCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.UserRightsUpdateRequest;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Services.ManageRightsService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("manage-rights")
 @PreAuthorize("isAuthenticated()")
-@Tag(name = "Manage Rights Controller", description = "CONDITION REQUIRED")
+@Tag(name = "Manage Rights Controller", description = "<h4>${SWAGGER.TAG.CONDITION.REQUIRED}</h4>")
 public class ManageRightsController {
 	
 	@Autowired
@@ -38,7 +39,7 @@ public class ManageRightsController {
 	@GetMapping("/user-referentials")
 	@Operation(
 			summary = "Get all referentials of user rights",
-			description = "Retrieve all referentials of user rights",
+			description = "<h2>Retrieve all referentials of user rights</h2>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully retrieved all referentials of user rights")
 	)
 	public List<ReferentialUserRight> getAllUserRightReferentials() {
@@ -48,29 +49,29 @@ public class ManageRightsController {
 	@PostMapping("/user-referentials/add")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Add multiples referentials of user rights",
-			description = "Append multiple user rights to the referential",
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Add multiples referentials of user rights",
+			description = "<h2>Append multiple user rights to the referential</h2>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully added to the user rights referentials")
 	)
-	public List<ReferentialUserRight> addUserRightReferentials(@RequestBody(required = true) AddReferentialUserRightRequest addReferentialUserRightRequest) {
-		return manageRightsService.addUserRightReferentials(addReferentialUserRightRequest);
+	public List<ReferentialUserRight> addUserRightReferentials(@RequestBody(required = true) ReferentialUserRightCreateRequest referentialUserRightCreateRequest) {
+		return manageRightsService.addUserRightReferentials(referentialUserRightCreateRequest);
 	}
 	
 	@PutMapping("/user-referentials/update")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Update one referential of user rights",
-			description = "Update one referential by giving the id of the right in request body",
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Update referential of user rights",
+			description = "<h2>Update one referential by giving the id of the right in request body</h2>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully updated the referential of user rights")
 	)
-	public List<ReferentialUserRight> updateUserRightReferentials(@RequestBody UpdateReferentialUserRightRequest updateReferentialUserRightRequest) {
-		return manageRightsService.updateUserRightReferentials(updateReferentialUserRightRequest);
+	public List<ReferentialUserRight> updateUserRightReferentials(@RequestBody ReferentialUserRightUpdateRequest referentialUserRightUpdateRequest) {
+		return manageRightsService.updateUserRightReferentials(referentialUserRightUpdateRequest);
 	}
 	
 	@GetMapping("/users")
 	@Operation(
 			summary = "Get user rights of all users",
-			description = "Retrieve user rights of all users",
+			description = "<h2>Retrieve user rights of all users</h2>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully retrieved user rights of all users")
 	)
 	public List<ManageRightsResource> getUserRightsOfUsers() {
@@ -80,7 +81,8 @@ public class ManageRightsController {
 	@GetMapping("/user/{username}")
 	@Operation(
 			summary = "Get user rights by username",
-			description = "Retrieve the user rights informations by giving the username",
+			description = "<h2>Get user rights by username</h2>"
+					+ "<h4>Retrieve the user rights informations by giving the username</h4>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully retrieved the user rights"),
 					@ApiResponse(responseCode = "500", description = "Throw an exception - user not existing", content = @Content(schema = @Schema(hidden = true)))}
@@ -92,24 +94,26 @@ public class ManageRightsController {
 	@PostMapping("/user/add")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Add user rights",
-			description = "Insert multiple user rights by giving the id user in the request body",
+			hidden = true,
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Add user rights",
+			description = "<h2>Add user rights</h2>"
+					+ "<h4>Insert multiple user rights by giving the id user in the request body</h4>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully added the user rights")
 	)
-	public ManageRightsResource addUserRights(@RequestBody UserRightsRequest userRightsRequest) {
-		return manageRightsService.addUserRights(userRightsRequest);
+	public ManageRightsResource addUserRights(@RequestBody UserRightsCreateRequest userRightsCreateRequest) {
+		return manageRightsService.addUserRights(userRightsCreateRequest);
 	}
 	
-	@PutMapping("/user/update")
+	@PutMapping("/user/update/{idUser}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED}. Update user rights",
-			description = "Update multiple user rights by giving the id user in the request body",
+			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Update user rights",
+			description = "<h2>Update multiple user rights by giving the id user in the request body</h2>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully updated the user rights"),
 					@ApiResponse(responseCode = "500", description = "Throw an exception - Referentials user rights not exist", content = @Content(schema = @Schema(hidden = true)))}
 	)
-	public ManageRightsResource updateUserRights(@RequestBody UserRightsRequest userRightsRequest) {
-		return manageRightsService.updateUserRights(userRightsRequest);
+	public ManageRightsResource updateUserRights(@PathVariable String idUser, @RequestBody UserRightsUpdateRequest userRightsUpdateRequest) {
+		return manageRightsService.updateUserRights(idUser, userRightsUpdateRequest);
 	}
 }

@@ -14,11 +14,10 @@ import io.swagger.v3.oas.annotations.info.Info;
 				version = "1.0",
 				description =
 					"<html>"
-					+ "<h2>IJVA500 Project Cecile Damien Laurie Nathan Victor</h2>"
-					+ "<h3>===> Read me <===</h3>"
-					+ "${SWAGGER.TAG.CONDITION.REQUIRED} = Controller soumis à des conditions"
-					+ "<br>"
-					+ "${SWAGGER.TAG.ACCESS.CONTROLED} = Endpoint du controller soumis à un contrôle d'accès"
+					+ "<h1>IJVA500 Project Cecile Damien Laurie Nathan Victor</h1>"
+					+ "<h2>===> Read me <===</h2>"
+					+ "<h4>${SWAGGER.TAG.CONDITION.REQUIRED} = Controller soumis à des conditions</h4>"
+					+ "<h4>${SWAGGER.TAG.ACCESS.CONTROLED} = Endpoints du controller soumis à un contrôle de droit d'accès</h4>"
 					+ "</html>")
 		)
 public class SwaggerConfig implements WebMvcConfigurer {
