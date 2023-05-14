@@ -24,14 +24,13 @@ import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.AmendmentCreateRe
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionResource;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionUpdateRequest;
-import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.VoteCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Services.PropositionService;
+import com.cedalanavi.project_ijva500_soa_api.utils.PropositionType;
 import com.cedalanavi.project_ijva500_soa_api.utils.SearchPropositionParams;
 import com.cedalanavi.project_ijva500_soa_api.utils.VoteType;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,21 +50,26 @@ public class PropositionController {
 
 	@GetMapping("/search")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Search propositions/amendments",
+			summary = "Search propositions/amendments",
 			description = "<h2>Retrieve propositions/amendments by given params</h2> "
 					+ "<h4><b>Params are optionals.</b> To retrieve all data, remove <b>params</b></h4>",
+			parameters = {
+					@Parameter(name = "type", description = "<b>(optional)</b> Type of the suggestion to search)"),
+					@Parameter(name = "params", description = "<b>(optional)</b> Search request parameters", schema = @Schema(allOf = SearchPropositionParams.class))
+			},
 			responses = @ApiResponse(
 					responseCode = "200",
-					description = "Successfully retrieved all users informations"),
-			parameters = @Parameter(name = "params", schema = @Schema(allOf = SearchPropositionParams.class))
+					description = "Successfully retrieved all users informations")
 	)
-	public List<PropositionResource> searchPropositions(@RequestParam(required = false) LinkedMultiValueMap<String, String> params) {
+	public List<PropositionResource> searchPropositions(
+			@RequestParam(required = false) @Schema(implementation = PropositionType.class) String type,
+			@RequestParam(required = false) LinkedMultiValueMap<String, String> params) {
 		return propositionService.searchProposition(params);
 	}
 
 	@PostMapping("/proposition")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Create proposition",
+			summary = "Create proposition",
 			description = "<h2>Create proposition</h2>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully created a proposition"),
@@ -84,7 +88,7 @@ public class PropositionController {
 	
 	@PostMapping("/amendment")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Create amendment",
+			summary = "Create amendment",
 			description = "<h2>Create amendment</h2>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully created an amendment"),
@@ -101,9 +105,10 @@ public class PropositionController {
 	
 	@PutMapping("/update/{id}")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Update proposition/amendment",
+			summary = "Update proposition/amendment by id",
 			description = "<h2>Update proposition/amendment by id</h2>"
-					+ "<h4>Update proposition or amendment for only given informations. <b>Not all infos is required</b></h4>",
+					+ "<h4>Update proposition or amendment for only given informations. <b>Not all infos are required</b></h4>"
+					+ "<h4>Can only update proposition/amendment added by the user</h4>",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully created an amendment"),
 					@ApiResponse(
@@ -112,14 +117,19 @@ public class PropositionController {
 							content = @Content(schema = @Schema(hidden = true)))
 					}
 	)
-	public PropositionResource update(@PathVariable Long id, @RequestBody PropositionUpdateRequest updateRequest) {
-		return propositionService.update(id, updateRequest);
+	public PropositionResource update(HttpServletRequest httpServletRequest, @PathVariable Long id, @RequestBody PropositionUpdateRequest updateRequest) throws Exception {
+		UserDetailsResource userDetailsResource = authenticationService.currentSession(httpServletRequest);
+		return propositionService.update(userDetailsResource, id, updateRequest);
 	}
 	
-	@PostMapping("/vote")
+	@PostMapping("/vote/{id}")
 	@Operation(
-			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Vote proposition/amendment",
-			description = "<h2>Vote proposition/amendment</h2>",
+			summary = "Vote proposition/amendment by id",
+			description = "<h2>Vote proposition/amendment by id</h2>",
+			parameters = {
+					@Parameter(name = "id", description = "Id of proposition/amendment to vote"),
+					@Parameter(name = "voteType", description = "Type of vote")
+			},
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully voted proposition/amendment"),
 					@ApiResponse(
@@ -129,11 +139,9 @@ public class PropositionController {
 					}
 	)
 	public PropositionResource vote(HttpServletRequest httpServletRequest,
-			@Parameter(in = ParameterIn.QUERY, schema = @Schema(implementation = VoteType.class)) String voteType,
-			@RequestBody VoteCreateRequest voteCreateRequest) throws Exception {
+			@PathVariable Long id, @RequestParam @Schema(implementation = VoteType.class) String voteType) throws Exception {
 		UserDetailsResource userDetailsResource = authenticationService.currentSession(httpServletRequest);
-		voteCreateRequest.voteType = voteType;
-		return propositionService.vote(userDetailsResource, voteCreateRequest);
+		return propositionService.vote(userDetailsResource, id, voteType);
 	}
 
 }

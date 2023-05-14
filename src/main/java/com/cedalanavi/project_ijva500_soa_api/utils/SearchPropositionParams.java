@@ -8,6 +8,4 @@ public class SearchPropositionParams {
 	
 	public String idUser;
 	
-	public String type;
-	
 }

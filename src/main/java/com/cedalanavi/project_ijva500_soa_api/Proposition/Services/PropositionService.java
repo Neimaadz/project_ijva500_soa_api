@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.UserDetailsResource;
+import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ReferentialUserRight;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.AmendmentCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionResource;
@@ -51,14 +52,22 @@ public class PropositionService {
 		return restTemplate.exchange(propositionServiceUrl + "/amendment", HttpMethod.POST,  request, PropositionResource.class).getBody();
 	}
 	
-	public PropositionResource update(Long id, PropositionUpdateRequest updateRequest) {
+	public PropositionResource update(UserDetailsResource userDetailsResource, Long id, PropositionUpdateRequest updateRequest) throws Exception {
+		PropositionResource proposition = restTemplate.exchange(propositionServiceUrl + "/" + id, HttpMethod.GET, null, PropositionResource.class).getBody();
+		ReferentialUserRight isAdmin = userDetailsResource.referentialUserRights.stream().filter(t -> t.label.equals("ROLE_ADMIN")).findFirst().orElse(null);
+
+		if(!userDetailsResource.getIdUser().equals(proposition.idUser) && isAdmin == null) {
+			throw new Exception("Error : can not update, permission denied");
+		}
 		HttpEntity<PropositionUpdateRequest> request = new HttpEntity<PropositionUpdateRequest>(updateRequest);
 		return restTemplate.exchange(propositionServiceUrl + "/update/" + id, HttpMethod.PUT,  request, PropositionResource.class).getBody();
 	}
 
-	public PropositionResource vote(UserDetailsResource userDetailsResource, VoteCreateRequest voteCreateRequest) throws Exception {
+	public PropositionResource vote(UserDetailsResource userDetailsResource, Long id, String voteType) throws Exception {
+		VoteCreateRequest voteCreateRequest = new VoteCreateRequest();
+		voteCreateRequest.setVoteType(voteType);
 		voteCreateRequest.setIdUser(userDetailsResource.getIdUser());
 		HttpEntity<VoteCreateRequest> request = new HttpEntity<VoteCreateRequest>(voteCreateRequest);
-		return restTemplate.exchange(propositionServiceUrl + "/vote", HttpMethod.POST,  request, PropositionResource.class).getBody();
+		return restTemplate.exchange(propositionServiceUrl + "/vote/" + id, HttpMethod.POST,  request, PropositionResource.class).getBody();
 	}
 }

@@ -7,8 +7,6 @@ public class VoteCreateRequest {
 	@Hidden
 	public String idUser;
 
-	public Long idProposition;
-
 	@Hidden
 	public String voteType;
 
@@ -18,5 +16,13 @@ public class VoteCreateRequest {
 
 	public void setIdUser(String idUser) {
 		this.idUser = idUser;
+	}
+
+	public String getVoteType() {
+		return voteType;
+	}
+
+	public void setVoteType(String voteType) {
+		this.voteType = voteType;
 	}
 }

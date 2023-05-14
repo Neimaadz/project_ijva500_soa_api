@@ -87,7 +87,7 @@ public class ManageRightsController {
 					@ApiResponse(responseCode = "200", description = "Successfully retrieved the user rights"),
 					@ApiResponse(responseCode = "500", description = "Throw an exception - user not existing", content = @Content(schema = @Schema(hidden = true)))}
 	)
-	public ManageRightsResource getUserRightsByUsername(@PathVariable @Parameter(name = "username", description = "The username of the user") String username) {
+	public ManageRightsResource getUserRightsByUsername(@PathVariable @Parameter(name = "username", description = "The name of the user") String username) {
 		return manageRightsService.getUserRightsByUsername(username);
 	}
 	

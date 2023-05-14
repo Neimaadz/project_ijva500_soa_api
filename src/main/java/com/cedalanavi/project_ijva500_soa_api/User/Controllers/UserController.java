@@ -77,7 +77,8 @@ public class UserController {
 	@DeleteMapping("/delete/{idUser}")
 	@Operation(
 			summary = "${SWAGGER.TAG.ACCESS.CONTROLED} Delete user by id user",
-			description = "<h2>Delete the user by giving the id user</h2>",
+			description = "<h2>Delete user by id user</h2>"
+					+ "<h4>Delete the user from all services by giving the id user</h4>",
 			responses = @ApiResponse(responseCode = "200", description = "Successfully deleted the user informations")
 	)
 	public void deleteUser(@PathVariable String idUser) {
