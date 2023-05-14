@@ -34,5 +34,6 @@ public class PropositionResource {
 	public List<PropositionResource> amendments;
 
 	public List<PropositionVoteResource> propositionVotes;
-	
+
+	public List<CommentaryResource> commentaries;
 }

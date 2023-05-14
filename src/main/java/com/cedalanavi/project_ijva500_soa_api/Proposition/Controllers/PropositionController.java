@@ -21,13 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.UserDetailsResource;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Services.AuthenticationService;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.AmendmentCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.CommentaryCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionResource;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionUpdateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Services.PropositionService;
-import com.cedalanavi.project_ijva500_soa_api.utils.PropositionType;
+import com.cedalanavi.project_ijva500_soa_api.utils.PropositionStatus;
+import com.cedalanavi.project_ijva500_soa_api.utils.PropositionTypes;
 import com.cedalanavi.project_ijva500_soa_api.utils.SearchPropositionParams;
-import com.cedalanavi.project_ijva500_soa_api.utils.VoteType;
+import com.cedalanavi.project_ijva500_soa_api.utils.VoteTypes;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -62,7 +64,7 @@ public class PropositionController {
 					description = "Successfully retrieved all users informations")
 	)
 	public List<PropositionResource> searchPropositions(
-			@RequestParam(required = false) @Schema(implementation = PropositionType.class) String type,
+			@RequestParam(required = false) @Schema(implementation = PropositionTypes.class) String type,
 			@RequestParam(required = false) LinkedMultiValueMap<String, String> params) {
 		return propositionService.searchProposition(params);
 	}
@@ -108,7 +110,12 @@ public class PropositionController {
 			summary = "Update proposition/amendment by id",
 			description = "<h2>Update proposition/amendment by id</h2>"
 					+ "<h4>Update proposition or amendment for only given informations. <b>Not all infos are required</b></h4>"
-					+ "<h4>Can only update proposition/amendment added by the user</h4>",
+					+ "<h4>Can only update proposition/amendment added by the current user</h4>",
+			parameters = {
+					@Parameter(name = "id", description = "Proposition/amendment id to update"),
+					@Parameter(name = "status", description = "Proposition/amendment status")
+			},
+			requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "<b>(optional)</b> Data to send"),
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Successfully created an amendment"),
 					@ApiResponse(
@@ -117,15 +124,21 @@ public class PropositionController {
 							content = @Content(schema = @Schema(hidden = true)))
 					}
 	)
-	public PropositionResource update(HttpServletRequest httpServletRequest, @PathVariable Long id, @RequestBody PropositionUpdateRequest updateRequest) throws Exception {
+	public PropositionResource update(HttpServletRequest httpServletRequest,
+			@PathVariable Long id, @RequestParam @Schema(implementation = PropositionStatus.class) String status,
+			@RequestBody(required = false) PropositionUpdateRequest propositionUpdateRequest) throws Exception {
 		UserDetailsResource userDetailsResource = authenticationService.currentSession(httpServletRequest);
-		return propositionService.update(userDetailsResource, id, updateRequest);
+		if (propositionUpdateRequest == null) {
+			propositionUpdateRequest = new PropositionUpdateRequest();
+		}
+		return propositionService.update(userDetailsResource, id, propositionUpdateRequest, status);
 	}
 	
 	@PostMapping("/vote/{id}")
 	@Operation(
 			summary = "Vote proposition/amendment by id",
-			description = "<h2>Vote proposition/amendment by id</h2>",
+			description = "<h2>Vote proposition/amendment by id</h2>"
+					+ "<h4>Vote a proposition/amendment by giving id. <b>Can only vote once per status</b></h4>",
 			parameters = {
 					@Parameter(name = "id", description = "Id of proposition/amendment to vote"),
 					@Parameter(name = "voteType", description = "Type of vote")
@@ -139,9 +152,16 @@ public class PropositionController {
 					}
 	)
 	public PropositionResource vote(HttpServletRequest httpServletRequest,
-			@PathVariable Long id, @RequestParam @Schema(implementation = VoteType.class) String voteType) throws Exception {
+			@PathVariable Long id, @RequestParam @Schema(implementation = VoteTypes.class) String voteType) throws Exception {
 		UserDetailsResource userDetailsResource = authenticationService.currentSession(httpServletRequest);
 		return propositionService.vote(userDetailsResource, id, voteType);
+	}
+	
+	@PostMapping("/commentary/add/{id}")
+	public PropositionResource addCommentary(HttpServletRequest httpServletRequest,
+			@PathVariable Long id, @RequestBody CommentaryCreateRequest commentaryCreateRequest) throws Exception {
+		UserDetailsResource userDetailsResource = authenticationService.currentSession(httpServletRequest);
+		return propositionService.addCommentary(userDetailsResource, id, commentaryCreateRequest);
 	}
 
 }

@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.cedalanavi.project_ijva500_soa_api.Authentication.Data.UserDetailsResource;
 import com.cedalanavi.project_ijva500_soa_api.ManageRights.Data.ReferentialUserRight;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.AmendmentCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.CommentaryCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionResource;
 import com.cedalanavi.project_ijva500_soa_api.Proposition.Data.PropositionUpdateRequest;
@@ -52,7 +53,8 @@ public class PropositionService {
 		return restTemplate.exchange(propositionServiceUrl + "/amendment", HttpMethod.POST,  request, PropositionResource.class).getBody();
 	}
 	
-	public PropositionResource update(UserDetailsResource userDetailsResource, Long id, PropositionUpdateRequest updateRequest) throws Exception {
+	public PropositionResource update(UserDetailsResource userDetailsResource, Long id, PropositionUpdateRequest updateRequest, String status) throws Exception {
+		updateRequest.setStatus(status);
 		PropositionResource proposition = restTemplate.exchange(propositionServiceUrl + "/" + id, HttpMethod.GET, null, PropositionResource.class).getBody();
 		ReferentialUserRight isAdmin = userDetailsResource.referentialUserRights.stream().filter(t -> t.label.equals("ROLE_ADMIN")).findFirst().orElse(null);
 
@@ -69,5 +71,11 @@ public class PropositionService {
 		voteCreateRequest.setIdUser(userDetailsResource.getIdUser());
 		HttpEntity<VoteCreateRequest> request = new HttpEntity<VoteCreateRequest>(voteCreateRequest);
 		return restTemplate.exchange(propositionServiceUrl + "/vote/" + id, HttpMethod.POST,  request, PropositionResource.class).getBody();
+	}
+
+	public PropositionResource addCommentary(UserDetailsResource userDetailsResource, Long id, CommentaryCreateRequest commentaryCreateRequest) {
+		commentaryCreateRequest.setIdUser(userDetailsResource.getIdUser());
+		HttpEntity<CommentaryCreateRequest> request = new HttpEntity<CommentaryCreateRequest>(commentaryCreateRequest);
+		return restTemplate.exchange(propositionServiceUrl + "/commentary/add/" + id, HttpMethod.POST,  request, PropositionResource.class).getBody();
 	}
 }

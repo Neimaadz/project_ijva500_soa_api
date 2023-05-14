@@ -1,6 +1,6 @@
 package com.cedalanavi.project_ijva500_soa_api.utils;
 
-public enum VoteType {
+public enum VoteTypes {
 	SUPPORTED,
 	ACCEPTED,
 	REJECTED,
