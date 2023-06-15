@@ -1,7 +1,5 @@
 package com.cedalanavi.project_ijva500_soa_api.Project.Services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,9 +21,7 @@ public class ProjectService {
 	@Value("${project.service.url}/manage-project")
 	String projectServiceUrl;
 
-	@Autowired
-	@Qualifier("myRestTemplate")
-	RestTemplate restTemplate;
+	RestTemplate restTemplate = new RestTemplate();
 
 	public Project[] getAll() {
 		ResponseEntity<Project[]> response = restTemplate.getForEntity(projectServiceUrl, Project[].class);

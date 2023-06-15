@@ -2,8 +2,6 @@ package com.cedalanavi.project_ijva500_soa_api.User.Services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -26,11 +24,8 @@ public class UserService {
 
 	@Value("${authentication.service.url}")
 	String authServiceUrl;
-	
-	@Autowired
-    @Qualifier("myRestTemplate")
-	RestTemplate restTemplate;
 
+	RestTemplate restTemplate = new RestTemplate();
 
 	public List<UserResource> getUsers() {
 		return restTemplate.exchange(userServiceUrl + "/users", HttpMethod.GET,  null, new ParameterizedTypeReference<List<UserResource>>(){}).getBody();

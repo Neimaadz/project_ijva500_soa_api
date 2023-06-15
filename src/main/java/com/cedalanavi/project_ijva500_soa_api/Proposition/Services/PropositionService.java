@@ -2,8 +2,6 @@ package com.cedalanavi.project_ijva500_soa_api.Proposition.Services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -27,11 +25,8 @@ public class PropositionService {
 
 	@Value("${proposition.service.url}")
 	String propositionServiceUrl;
-	
-	@Autowired
-    @Qualifier("myRestTemplate")
-	RestTemplate restTemplate;
 
+	RestTemplate restTemplate = new RestTemplate();
 
 	public List<PropositionResource> searchProposition(LinkedMultiValueMap<String, String> params) {
 		String urlTemplate = UriComponentsBuilder.fromHttpUrl(propositionServiceUrl + "/search")

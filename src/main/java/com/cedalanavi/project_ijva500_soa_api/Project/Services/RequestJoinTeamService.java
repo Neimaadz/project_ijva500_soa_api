@@ -1,7 +1,5 @@
 package com.cedalanavi.project_ijva500_soa_api.Project.Services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,9 +18,7 @@ public class RequestJoinTeamService {
 	@Value("${project.service.url}/manage-requestjointeam")
 	String projectServiceUrl;
 
-	@Autowired
-	@Qualifier("myRestTemplate")
-	RestTemplate restTemplate;
+	RestTemplate restTemplate = new RestTemplate();
 	
 	public RequestJoinTeam[] getAll() {
 		ResponseEntity<RequestJoinTeam[]> response = restTemplate.getForEntity(projectServiceUrl, RequestJoinTeam[].class);
