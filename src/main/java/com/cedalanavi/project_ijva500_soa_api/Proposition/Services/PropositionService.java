@@ -1,5 +1,6 @@
 package com.cedalanavi.project_ijva500_soa_api.Proposition.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,20 +117,49 @@ public class PropositionService {
 		HttpEntity<VoteCreateRequest> request = new HttpEntity<VoteCreateRequest>(voteCreateRequest);
 		PropositionResource propositionResource = restTemplate.exchange(propositionServiceUrl + "/vote/" + id, HttpMethod.POST,  request, PropositionResource.class).getBody();
 		setPropositionProject(projectService.getAll(), propositionResource);
-		
+
+		PropositionUpdateRequest updateRequest = new PropositionUpdateRequest();
 		int countUsers = 0;
+		List<TeamResource> totalTeamResources = new ArrayList<TeamResource>();
 		for (ProjectResource projectResource : propositionResource.getProject().getProjects()) {
 			for (TeamResource teamResource : projectResource.getTeams()) {
-				countUsers += teamResource.usersIds.size();
+				totalTeamResources.add(teamResource);
 			}
 		}
+		countUsers += totalTeamResources.stream().distinct().count();
 		
-		if (countUsers == propositionResource.propositionVotes.size()) {
-			PropositionUpdateRequest updateRequest = new PropositionUpdateRequest();
-			updateRequest.setStatus(PropositionStatus.IN_PROGRESS);
-			HttpEntity<PropositionUpdateRequest> requestUpdate = new HttpEntity<PropositionUpdateRequest>(updateRequest);
-			propositionResource = restTemplate.exchange(propositionServiceUrl + "/update/" + id, HttpMethod.PUT,  requestUpdate, PropositionResource.class).getBody();
+		if (propositionResource.status.equals(PropositionStatus.EVALUATION)) {
+			int countPropositionSupported = 0;
+			for (PropositionVoteResource propositionVoteResource : propositionResource.propositionVotes) {
+				if (propositionVoteResource.voteType.equals(VoteTypes.SUPPORTED)) {
+					countPropositionSupported += 1;
+				}
+			}
+			
+			if (countPropositionSupported == countUsers) {
+				updateRequest.setStatus(PropositionStatus.IN_PROGRESS);
+			}
 		}
+		if (propositionResource.status.equals(PropositionStatus.IN_PROGRESS)) {
+			float countPropositionAccepted = 0;
+			float countPropositionRejected = 0;
+			for (PropositionVoteResource propositionVoteResource : propositionResource.propositionVotes) {
+				if (propositionVoteResource.voteType.equals(VoteTypes.ACCEPTED)) {
+					countPropositionAccepted += 1;
+				}
+				if (propositionVoteResource.voteType.equals(VoteTypes.REJECTED)) {
+					countPropositionRejected += 1;
+				}
+			}
+			if (countPropositionAccepted / countUsers >= 0.5) {
+				updateRequest.setStatus(PropositionStatus.ACCEPTED);
+			}
+			if ((countPropositionRejected / countUsers) >= 0.5) {
+				updateRequest.setStatus(PropositionStatus.REJECTED);
+			}
+		}
+		HttpEntity<PropositionUpdateRequest> requestUpdate = new HttpEntity<PropositionUpdateRequest>(updateRequest);
+		propositionResource = restTemplate.exchange(propositionServiceUrl + "/update/" + id, HttpMethod.PUT,  requestUpdate, PropositionResource.class).getBody();
 		setPropositionProject(projectService.getAll(), propositionResource);
 		
 		return propositionResource;
