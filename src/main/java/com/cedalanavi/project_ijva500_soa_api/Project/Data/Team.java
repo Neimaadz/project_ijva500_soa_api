@@ -14,5 +14,5 @@ public class Team {
 	public int teamTypeId;
 	
 	@ElementCollection
-	public List<Integer> usersIds;
+	public List<String> usersIds;
 }

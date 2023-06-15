@@ -10,7 +10,7 @@ public class RequestJoinTeam{
 	public int teamId;
 
 	@JsonIgnore(value = false)
-	public int userId;
+	public String userId;
 	
 	@JsonIgnore(value = false)
 	public String status;
