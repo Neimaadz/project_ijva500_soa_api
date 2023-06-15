@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -46,8 +45,6 @@ public class AuthenticationService {
 	@Value("${user.service.url}")
 	String userServiceUrl;
 
-	@Autowired
-    @Qualifier("myRestTemplate")
 	RestTemplate restTemplate = new RestTemplate();
 	
 	@Autowired
@@ -83,7 +80,7 @@ public class AuthenticationService {
 	public AuthenticationResource signin(HttpServletRequest httpServletRequest, AuthenticationRequest authenticationRequest) throws AuthenticationException {
 		// Call Authentication service to get token
 		HttpEntity<AuthenticationRequest> authRequest = new HttpEntity<AuthenticationRequest>(authenticationRequest);
-		AuthenticationResource authenticationResource = new RestTemplate().exchange(authServiceUrl + "/signin", HttpMethod.POST, authRequest, AuthenticationResource.class).getBody();
+		AuthenticationResource authenticationResource = restTemplate.exchange(authServiceUrl + "/signin", HttpMethod.POST, authRequest, AuthenticationResource.class).getBody();
 		final String token = authenticationResource.token;
 		// Store token in session to use lately
 		httpServletRequest.getSession().setAttribute("Authorization", "Bearer " + token);
