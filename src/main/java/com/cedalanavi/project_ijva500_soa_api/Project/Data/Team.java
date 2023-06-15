@@ -11,7 +11,7 @@ public class Team {
 	public String name;
 
 	@JsonIgnore(value = false)
-	public int teamTypeId;
+	public TypeTeam typeTeam;
 	
 	@ElementCollection
 	public List<String> usersIds;
