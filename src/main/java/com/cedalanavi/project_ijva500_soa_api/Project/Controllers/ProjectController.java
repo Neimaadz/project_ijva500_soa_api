@@ -1,5 +1,7 @@
 package com.cedalanavi.project_ijva500_soa_api.Project.Controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cedalanavi.project_ijva500_soa_api.Project.Data.Project;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectResource;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectSetProjectsRequest;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectSetTeamsRequest;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectUpdateRequest;
@@ -25,8 +27,8 @@ public class ProjectController {
 	@Autowired
 	ProjectService projectService;
 
-	@GetMapping("")
-	public Project[] getAll() {
+	@GetMapping
+	public List<ProjectResource> getAll() {
 		return projectService.getAll();
 	}
 

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.cedalanavi.project_ijva500_soa_api.Project.Data.TypeTeam;
+import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamType;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.TypeTeamCreateRequest;
 
 @Service
@@ -20,10 +20,10 @@ public class TypeTeamService {
 	RestTemplate restTemplate = new RestTemplate();
 
 	
-	public TypeTeam[] getAll() {
+	public TeamType[] getAll() {
 		System.out.println(projectServiceUrl);
-		ResponseEntity<TypeTeam[]> response = restTemplate.getForEntity(projectServiceUrl, TypeTeam[].class);
-		TypeTeam[] typeTeams = response.getBody();
+		ResponseEntity<TeamType[]> response = restTemplate.getForEntity(projectServiceUrl, TeamType[].class);
+		TeamType[] typeTeams = response.getBody();
 		return typeTeams;
 	}
 	

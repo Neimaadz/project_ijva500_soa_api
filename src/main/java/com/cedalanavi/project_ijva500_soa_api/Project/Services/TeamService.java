@@ -1,6 +1,9 @@
 package com.cedalanavi.project_ijva500_soa_api.Project.Services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.cedalanavi.project_ijva500_soa_api.Project.Data.Team;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamResource;
 
 @Service
 public class TeamService {
@@ -20,10 +23,10 @@ public class TeamService {
 
 	RestTemplate restTemplate = new RestTemplate();
 	
-	public Team[] getAll() {
-		ResponseEntity<Team[]> response = restTemplate.getForEntity(projectServiceUrl, Team[].class);
-		Team[] team = response.getBody();
-		return team;
+	public List<TeamResource> getAll() {
+		ResponseEntity<List<TeamResource>> response = restTemplate.exchange(projectServiceUrl, HttpMethod.GET,  null, new ParameterizedTypeReference<List<TeamResource>>(){});
+		List<TeamResource> teams = response.getBody();
+		return teams;
 	}
 	
 //	public List<Team> getAllByProjectId(Integer project_id) {

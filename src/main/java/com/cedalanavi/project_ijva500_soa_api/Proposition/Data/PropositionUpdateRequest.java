@@ -1,5 +1,7 @@
 package com.cedalanavi.project_ijva500_soa_api.Proposition.Data;
 
+import com.cedalanavi.project_ijva500_soa_api.utils.PropositionStatus;
+
 import io.swagger.v3.oas.annotations.Hidden;
 
 public class PropositionUpdateRequest {
@@ -9,17 +11,17 @@ public class PropositionUpdateRequest {
 	public String description;
 	
 	@Hidden
-	public String status;
+	public PropositionStatus status;
 
 	public Long delay;
 
 	public Long evaluateDelay;
 
-	public String getStatus() {
+	public PropositionStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(PropositionStatus status) {
 		this.status = status;
 	}
 	

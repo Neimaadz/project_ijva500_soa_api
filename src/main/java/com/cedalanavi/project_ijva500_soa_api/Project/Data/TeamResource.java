@@ -6,12 +6,16 @@ import javax.persistence.ElementCollection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Team {
+public class TeamResource {
+
+	@JsonIgnore(value = false)
+	public int id;
+	
 	@JsonIgnore(value = false)
 	public String name;
 
 	@JsonIgnore(value = false)
-	public TypeTeam typeTeam;
+	public TeamType teamType;
 	
 	@ElementCollection
 	public List<String> usersIds;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cedalanavi.project_ijva500_soa_api.Project.Data.TypeTeam;
+import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamType;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.TypeTeamCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Project.Services.TypeTeamService;
 
@@ -21,8 +21,8 @@ public class TypeTeamController {
 	private TypeTeamService typeTeamService;
 
 
-	@GetMapping("")
-	public TypeTeam[] getAll() {
+	@GetMapping
+	public TeamType[] getAll() {
 		return typeTeamService.getAll();
 	}
 

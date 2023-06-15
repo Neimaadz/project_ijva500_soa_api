@@ -1,6 +1,9 @@
 package com.cedalanavi.project_ijva500_soa_api.Project.Services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.cedalanavi.project_ijva500_soa_api.Project.Data.Project;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectResource;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectSetProjectsRequest;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectSetTeamsRequest;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.ProjectUpdateRequest;
@@ -23,16 +26,14 @@ public class ProjectService {
 
 	RestTemplate restTemplate = new RestTemplate();
 
-	public Project[] getAll() {
-		ResponseEntity<Project[]> response = restTemplate.getForEntity(projectServiceUrl, Project[].class);
-		Project[] project = response.getBody();
+	public List<ProjectResource> getAll() {
+		ResponseEntity<List<ProjectResource>> response = restTemplate.exchange(projectServiceUrl, HttpMethod.GET,  null, new ParameterizedTypeReference<List<ProjectResource>>(){});
+		List<ProjectResource> project = response.getBody();
 		return project;
 	}
 
 	public void create(ProjectCreateRequest projectCreateRequest) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ProjectCreateRequest> request = new HttpEntity<ProjectCreateRequest>(projectCreateRequest, headers);
+		HttpEntity<ProjectCreateRequest> request = new HttpEntity<ProjectCreateRequest>(projectCreateRequest);
 		restTemplate.exchange(projectServiceUrl + "/create", HttpMethod.POST, request, ProjectCreateRequest.class);
 	}
 

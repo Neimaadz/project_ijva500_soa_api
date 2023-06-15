@@ -1,5 +1,7 @@
 package com.cedalanavi.project_ijva500_soa_api.Project.Controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cedalanavi.project_ijva500_soa_api.Project.Data.Team;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamCreateRequest;
+import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamResource;
 import com.cedalanavi.project_ijva500_soa_api.Project.Services.TeamService;
 
 @RestController
@@ -20,8 +22,8 @@ public class TeamController {
 	@Autowired
 	private TeamService teamService;
 
-	@GetMapping("")
-	public Team[] getAll() {
+	@GetMapping
+	public List<TeamResource> getAll() {
 		return teamService.getAll();
 	}
 	
