@@ -118,7 +118,7 @@ public class PropositionService {
 		setPropositionProject(projectService.getAll(), propositionResource);
 
 		PropositionUpdateRequest updateRequest = new PropositionUpdateRequest();
-		int countUsers = 0;
+		float countUsers = 0;
 		List<String> totalUserIds = new ArrayList<String>();
 
 		if (propositionResource.getProject().getProjects() != null) {
@@ -133,7 +133,7 @@ public class PropositionService {
 				totalUserIds.addAll(teamResource.usersIds);
 			}
 		}
-		countUsers = (int) totalUserIds.stream().distinct().count();
+		countUsers = (float) totalUserIds.stream().distinct().count();
 		
 		if (propositionResource.status.equals(PropositionStatus.EVALUATION)) {
 			int countPropositionSupported = 0;
@@ -143,7 +143,7 @@ public class PropositionService {
 				}
 			}
 			
-			if (countPropositionSupported == countUsers) {
+			if ((countPropositionSupported / countUsers) >= 0.5) {
 				updateRequest.setStatus(PropositionStatus.IN_PROGRESS);
 			}
 		}
@@ -158,7 +158,7 @@ public class PropositionService {
 					countPropositionRejected += 1;
 				}
 			}
-			if (countPropositionAccepted / countUsers >= 0.5) {
+			if ((countPropositionAccepted / countUsers) >= 0.5) {
 				updateRequest.setStatus(PropositionStatus.ACCEPTED);
 			}
 			if ((countPropositionRejected / countUsers) >= 0.5) {
