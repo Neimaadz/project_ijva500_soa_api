@@ -33,11 +33,9 @@ public class RequestJoinTeamService {
 		restTemplate.exchange(projectServiceUrl + "/create", HttpMethod.POST, request, RequestJoinTeamCreateRequest.class);
 	}
 	
-	public void update(int id, RequestJoinTeamUpdateRequest requestJoinTeamUpdateRequest ) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<RequestJoinTeamUpdateRequest> request = new HttpEntity<RequestJoinTeamUpdateRequest>(requestJoinTeamUpdateRequest, headers);
-		restTemplate.exchange(projectServiceUrl + "/" + id + "/response", HttpMethod.PUT, request, RequestJoinTeamUpdateRequest.class);
+	public void update(int idRequest, RequestJoinTeamUpdateRequest requestJoinTeamUpdateRequest) {
+		HttpEntity<RequestJoinTeamUpdateRequest> request = new HttpEntity<RequestJoinTeamUpdateRequest>(requestJoinTeamUpdateRequest);
+		restTemplate.exchange(projectServiceUrl + "/" + idRequest + "/response", HttpMethod.PUT, request, RequestJoinTeamUpdateRequest.class);
 	}
 
 }

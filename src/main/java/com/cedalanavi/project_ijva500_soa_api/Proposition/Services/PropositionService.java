@@ -110,7 +110,6 @@ public class PropositionService {
 			throw new Exception("Error : already voted");
 		}
 		
-
 		VoteCreateRequest voteCreateRequest = new VoteCreateRequest();
 		voteCreateRequest.setVoteType(voteTypeReq);
 		voteCreateRequest.setIdUser(userDetailsResource.getIdUser());
@@ -120,13 +119,21 @@ public class PropositionService {
 
 		PropositionUpdateRequest updateRequest = new PropositionUpdateRequest();
 		int countUsers = 0;
-		List<TeamResource> totalTeamResources = new ArrayList<TeamResource>();
-		for (ProjectResource projectResource : propositionResource.getProject().getProjects()) {
-			for (TeamResource teamResource : projectResource.getTeams()) {
-				totalTeamResources.add(teamResource);
+		List<String> totalUserIds = new ArrayList<String>();
+
+		if (propositionResource.getProject().getProjects() != null) {
+			for (ProjectResource projectResource : propositionResource.getProject().getProjects()) {
+				for (TeamResource teamResource : projectResource.getTeams()) {
+					totalUserIds.addAll(teamResource.usersIds);
+				}
 			}
 		}
-		countUsers += totalTeamResources.stream().distinct().count();
+		if (propositionResource.getProject().getTeams() != null) {
+			for (TeamResource teamResource : propositionResource.getProject().getTeams()) {
+				totalUserIds.addAll(teamResource.usersIds);
+			}
+		}
+		countUsers = (int) totalUserIds.stream().distinct().count();
 		
 		if (propositionResource.status.equals(PropositionStatus.EVALUATION)) {
 			int countPropositionSupported = 0;

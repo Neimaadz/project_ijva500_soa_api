@@ -158,6 +158,16 @@ public class PropositionController {
 	}
 	
 	@PostMapping("/commentary/add/{id}")
+	@Operation(
+			summary = "Comment a proposition/amendment by id",
+			description = "<h2>Comment a proposition/amendment by giving the id</h2>",
+			parameters = {
+					@Parameter(name = "id", description = "Id of proposition/amendment")
+			},
+			responses = {
+					@ApiResponse(responseCode = "200", description = "Comment successfully added")
+			}
+	)
 	public PropositionResource addCommentary(HttpServletRequest httpServletRequest,
 			@PathVariable Long id, @RequestBody CommentaryCreateRequest commentaryCreateRequest) throws Exception {
 		UserDetailsResource userDetailsResource = authenticationService.currentSession(httpServletRequest);

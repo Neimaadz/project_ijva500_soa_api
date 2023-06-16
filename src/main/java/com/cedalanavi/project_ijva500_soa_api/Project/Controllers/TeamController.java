@@ -15,14 +15,26 @@ import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamCreateRequest;
 import com.cedalanavi.project_ijva500_soa_api.Project.Data.TeamResource;
 import com.cedalanavi.project_ijva500_soa_api.Project.Services.TeamService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/service-project/manage-team")
+@Tag(name = "Team Controller")
 public class TeamController {
 
 	@Autowired
 	private TeamService teamService;
 
 	@GetMapping
+	@Operation(
+			summary = "Get all teams",
+			description = "<h2>Retrieve all the teams</h2> ",
+			responses = @ApiResponse(
+					responseCode = "200",
+					description = "All teams retrieved")
+	)
 	public List<TeamResource> getAll() {
 		return teamService.getAll();
 	}
@@ -33,6 +45,13 @@ public class TeamController {
 //	}
 
 	@PostMapping(path = "/create")
+	@Operation(
+			summary = "Create a new team",
+			description = "<h2>Create a new team</h2> ",
+			responses = @ApiResponse(
+					responseCode = "200",
+					description = "The new team have been succesfully created")
+	)
 	public void create(@RequestBody TeamCreateRequest teamRequest, HttpServletResponse response){
 		teamService.create(teamRequest);
 	}
